@@ -1,0 +1,5 @@
+[package]
+name = "e04-pattern-matching"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

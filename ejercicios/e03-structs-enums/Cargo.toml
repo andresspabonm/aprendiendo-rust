@@ -1,0 +1,5 @@
+[package]
+name = "e03-structs-enums"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

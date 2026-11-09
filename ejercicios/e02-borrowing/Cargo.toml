@@ -1,0 +1,5 @@
+[package]
+name = "e02-borrowing"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
