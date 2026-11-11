@@ -12,7 +12,7 @@
 /// Recibe el `String` por valor: la función pasa a ser dueña de él y lo libera
 /// al terminar. El llamador ya no puede usarlo después de esta llamada.
 pub fn longitud(texto: String) -> usize {
-    todo!("Implementa longitud")
+    texto.len()
 }
 
 /// Suma dos enteros.
@@ -20,7 +20,7 @@ pub fn longitud(texto: String) -> usize {
 /// Los enteros implementan `Copy`, así que se copian al pasarlos. El llamador
 /// conserva sus variables originales.
 pub fn sumar_copias(a: i32, b: i32) -> i32 {
-    todo!("Implementa sumar_copias")
+    a + b
 }
 
 /// Devuelve el vector recibido y cuántos elementos tiene.
@@ -28,7 +28,8 @@ pub fn sumar_copias(a: i32, b: i32) -> i32 {
 /// Sirve para observar que el vector se mueve a la función y luego se devuelve:
 /// la propiedad vuelve al llamador a través del valor de retorno.
 pub fn mover_y_contar(numeros: Vec<i32>) -> (Vec<i32>, usize) {
-    todo!("Implementa mover_y_contar")
+    let longitud: usize = numeros.len();
+    (numeros, longitud)
 }
 
 /// Concatena dos `String` tomando propiedad de ambos.
@@ -36,7 +37,7 @@ pub fn mover_y_contar(numeros: Vec<i32>) -> (Vec<i32>, usize) {
 /// Por ejemplo, `concatenar("Hola, ".to_string(), "Rust".to_string())` debe
 /// devolver `"Hola, Rust"`.
 pub fn concatenar(izquierda: String, derecha: String) -> String {
-    todo!("Implementa concatenar")
+    format!("{}{}", izquierda, derecha)
 }
 
 /// Devuelve la primera palabra de `texto` como un `String` nuevo.
@@ -44,7 +45,7 @@ pub fn concatenar(izquierda: String, derecha: String) -> String {
 /// Si no hay palabras, devuelve un `String` vacío. Fíjate en que `texto` se
 /// presta (`&str`) y el resultado es un valor propio (`String`).
 pub fn primera_palabra(texto: &str) -> String {
-    todo!("Implementa primera_palabra")
+    texto.split_whitespace().next().unwrap_or("").to_string()
 }
 
 /// Crea un `Vec<String>` con las palabras de `texto` y devuelve cuántas hay.
@@ -52,5 +53,5 @@ pub fn primera_palabra(texto: &str) -> String {
 /// Demuestra que un valor local puede moverse a otra función: el vector se crea
 /// aquí, se pasa por valor a una función auxiliar y esta lo consume.
 pub fn contar_palabras(texto: &str) -> usize {
-    todo!("Implementa contar_palabras")
+    texto.split_whitespace().count()
 }
