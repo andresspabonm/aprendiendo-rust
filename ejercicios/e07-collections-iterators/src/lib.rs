@@ -15,28 +15,52 @@ use std::collections::HashMap;
 /// palabra. Las palabras vacías se ignoran. Por ejemplo, `"Hola, mundo. Hola!"`
 /// produce `{"hola": 2, "mundo": 1}`.
 pub fn frecuencias(texto: &str) -> HashMap<String, usize> {
-    todo!("Implementa frecuencias")
+    texto
+        .split_whitespace()
+        .map(|p: &str| {
+            p.trim_matches(|c: char| !c.is_alphanumeric())
+                .to_lowercase()
+        })
+        .filter(|p: &String| !p.is_empty())
+        .fold(
+            HashMap::new(),
+            |mut fs: HashMap<String, usize>, p: String| {
+                *fs.entry(p).or_default() += 1;
+                fs
+            },
+        )
 }
 
 /// Filtra los números pares y devuelve sus cuadrados, conservando el orden.
 pub fn pares_al_cuadrado(numeros: &[i32]) -> Vec<i32> {
-    todo!("Implementa pares_al_cuadrado")
+    numeros
+        .iter()
+        .filter(|n: &&i32| **n % 2 == 0)
+        .map(|n: &i32| n.pow(2))
+        .collect()
 }
 
 /// Suma los números pares.
 pub fn suma_de_pares(numeros: &[i32]) -> i32 {
-    todo!("Implementa suma_de_pares")
+    numeros.iter().filter(|n: &&i32| **n % 2 == 0).sum()
 }
 
 /// Devuelve los nombres cuya longitud en caracteres sea al menos `minimo`.
 pub fn nombres_largos(nombres: &[String], minimo: usize) -> Vec<String> {
-    todo!("Implementa nombres_largos")
+    nombres
+        .iter()
+        .filter(|s| s.chars().count() >= minimo)
+        .cloned()
+        .collect()
 }
 
 /// Agrupa palabras por su longitud en caracteres, conservando el orden de
 /// aparición dentro de cada grupo.
 pub fn agrupar_por_longitud(palabras: &[String]) -> HashMap<usize, Vec<String>> {
-    todo!("Implementa agrupar_por_longitud")
+    palabras.iter().fold(HashMap::new(), |mut map, p| {
+        map.entry(p.chars().count()).or_default().push(p.clone());
+        map
+    })
 }
 
 /// Devuelve la palabra más frecuente y su conteo.
@@ -44,7 +68,9 @@ pub fn agrupar_por_longitud(palabras: &[String]) -> HashMap<usize, Vec<String>> 
 /// Si hay empate, devuelve la que sea menor lexicográficamente. Devuelve `None`
 /// si el texto no tiene palabras. Usa `frecuencias` para no duplicar lógica.
 pub fn palabra_mas_frecuente(texto: &str) -> Option<(String, usize)> {
-    todo!("Implementa palabra_mas_frecuente")
+    frecuencias(texto)
+        .into_iter()
+        .max_by(|(a, b), (c, d)| b.cmp(d).then_with(|| c.cmp(a)))
 }
 
 /// Aplica una función dos veces: `f(f(valor))`.
@@ -52,7 +78,7 @@ pub fn aplicar_dos_veces<F>(f: F, valor: i32) -> i32
 where
     F: Fn(i32) -> i32,
 {
-    todo!("Implementa aplicar_dos_veces")
+    f(f(valor))
 }
 
 /// Acumula los valores empezando por `inicial`, usando la función `f`.
@@ -62,5 +88,7 @@ pub fn acumular<F>(valores: &[i32], inicial: i32, f: F) -> i32
 where
     F: Fn(i32, i32) -> i32,
 {
-    todo!("Implementa acumular")
+    valores
+        .iter()
+        .fold(inicial, |acumulado, &valor| f(acumulado, valor))
 }
