@@ -12,7 +12,11 @@
 /// Si miden lo mismo, devuelve `a`. El lifetime `'a` indica que el resultado
 /// vive al menos tanto como la más corta de las dos entradas.
 pub fn mas_larga<'a>(a: &'a str, b: &'a str) -> &'a str {
-    todo!("Implementa mas_larga")
+    if a.chars().count() >= b.chars().count() {
+        a
+    } else {
+        b
+    }
 }
 
 /// Devuelve la primera palabra del texto, o `""` si está vacío.
@@ -20,7 +24,7 @@ pub fn mas_larga<'a>(a: &'a str, b: &'a str) -> &'a str {
 /// Aquí no hace falta anotar lifetimes: la elisión permite que el resultado
 /// herede el lifetime del único parámetro de entrada.
 pub fn primera_palabra(texto: &str) -> &str {
-    todo!("Implementa primera_palabra")
+    texto.split_whitespace().next().unwrap_or("")
 }
 
 /// Vista de una porción de un texto prestado.
@@ -39,17 +43,18 @@ impl<'a> Extracto<'a> {
     /// Devuelve `None` si `inicio > fin`, si `fin` supera la longitud del texto
     /// o si los índices no caen en límites de carácter UTF-8.
     pub fn new(texto: &'a str, inicio: usize, fin: usize) -> Option<Self> {
-        todo!("Implementa Extracto::new")
+        texto.get(inicio..fin)?;
+        Some(Self { texto, inicio, fin })
     }
 
     /// Devuelve la porción seleccionada.
     pub fn contenido(&self) -> &'a str {
-        todo!("Implementa Extracto::contenido")
+        self.texto.get(self.inicio..self.fin).unwrap()
     }
 
     /// Devuelve el texto completo del que se tomó el extracto.
     pub fn texto_completo(&self) -> &'a str {
-        todo!("Implementa Extracto::texto_completo")
+        self.texto
     }
 }
 
@@ -58,5 +63,8 @@ impl<'a> Extracto<'a> {
 /// La referencia devuelta apunta a uno de los elementos de `textos`, por eso el
 /// lifetime del resultado es el de la colección, no el de `patron`.
 pub fn buscar<'a>(textos: &'a [String], patron: &str) -> Option<&'a str> {
-    todo!("Implementa buscar")
+    textos
+        .iter()
+        .find(|t| t.contains(patron))
+        .map(|t| t.as_str())
 }
