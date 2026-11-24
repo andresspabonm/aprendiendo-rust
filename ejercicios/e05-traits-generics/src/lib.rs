@@ -40,56 +40,63 @@ pub struct Cuadrado {
 
 impl Figura for Circulo {
     fn area(&self) -> f64 {
-        todo!("Implementa Figura::area para Circulo")
+        std::f64::consts::PI * self.radio.powi(2)
     }
 
     fn nombre(&self) -> &'static str {
-        todo!("Implementa Figura::nombre para Circulo")
+        "círculo"
     }
 }
 
 impl Figura for Cuadrado {
     fn area(&self) -> f64 {
-        todo!("Implementa Figura::area para Cuadrado")
+        self.lado.powi(2)
     }
 
     fn nombre(&self) -> &'static str {
-        todo!("Implementa Figura::nombre para Cuadrado")
+        "cuadrado"
     }
 }
 
 /// Suma las áreas de cualquier colección de figuras del mismo tipo.
 pub fn area_total<T: Figura>(figuras: &[T]) -> f64 {
-    todo!("Implementa area_total")
+    figuras.iter().map(|f| f.area()).sum()
 }
 
 /// Devuelve la figura con mayor área, o `None` si la colección está vacía.
 ///
 /// Si hay empate, devuelve la primera.
 pub fn mayor_area<T: Figura>(figuras: &[T]) -> Option<&T> {
-    todo!("Implementa mayor_area")
+    figuras.iter().rev().max_by(|a, b| a.area().partial_cmp(&b.area()).unwrap())
 }
 
 /// Duplica un valor clonándolo.
 pub fn duplicar<T: Clone>(valor: T) -> (T, T) {
-    todo!("Implementa duplicar")
+    (valor.clone(), valor)
 }
 
 /// Devuelve el mayor de dos valores.
 pub fn maximo<T: PartialOrd + Copy>(a: T, b: T) -> T {
-    todo!("Implementa maximo")
+    if a >= b {
+        a
+    } else {
+        b
+    }
 }
 
 /// Crea una colección heterogénea usando despacho dinámico.
 ///
 /// Debe contener un círculo de radio `1.0` y un cuadrado de lado `2.0`.
 pub fn figuras_mixtas() -> Vec<Box<dyn Figura>> {
-    todo!("Implementa figuras_mixtas")
+    vec![
+        Box::new(Circulo { radio: 1.0 }),
+        Box::new(Cuadrado { lado: 2.0 })
+    ]
 }
 
 /// Suma las áreas de figuras heterogéneas.
 pub fn area_de_mixtas(figuras: &[Box<dyn Figura>]) -> f64 {
-    todo!("Implementa area_de_mixtas")
+    figuras.iter().map(|f| f.area()).sum()
 }
 
 /// Devuelve las descripciones de las figuras. El bound `Debug` no se usa en el
@@ -98,5 +105,5 @@ pub fn describir_todas<T>(figuras: &[T]) -> Vec<String>
 where
     T: Figura + fmt::Debug,
 {
-    todo!("Implementa describir_todas")
+    figuras.iter().map(|f| f.descripcion()).collect()
 }
