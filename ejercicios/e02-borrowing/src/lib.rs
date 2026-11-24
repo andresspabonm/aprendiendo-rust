@@ -11,7 +11,10 @@
 ///
 /// Recibe `&str`: solo presta el texto, no toma propiedad de él.
 pub fn contar_vocales(texto: &str) -> usize {
-    todo!("Implementa contar_vocales")
+    // Filtrar las vocales y contarlas
+    texto.chars()
+        .filter(|c| matches!(c.to_ascii_lowercase(), 'a' | 'e' | 'i' | 'o' | 'u'))
+        .count()
 }
 
 /// Normaliza un nombre en el lugar: quita espacios de los extremos, pasa a
@@ -22,19 +25,19 @@ pub fn contar_vocales(texto: &str) -> usize {
 /// Recibe `&mut String` porque modifica el valor del llamador sin quedarse con
 /// la propiedad.
 pub fn normalizar(nombre: &mut String) {
-    todo!("Implementa normalizar")
+    *nombre = nombre.to_ascii_lowercase().split_whitespace().collect::<Vec<_>>().join("-");
 }
 
 /// Suma los elementos de un slice.
 ///
 /// Un `&[i32]` sirve tanto para `Vec<i32>` como para arrays y para slices.
 pub fn sumar_slice(numeros: &[i32]) -> i32 {
-    todo!("Implementa sumar_slice")
+    numeros.iter().sum()
 }
 
 /// Sustituye los números negativos por cero, modificando el slice original.
 pub fn reemplazar_negativos(numeros: &mut [i32]) {
-    todo!("Implementa reemplazar_negativos")
+    numeros.iter_mut().for_each(|n| if *n < 0 { *n = 0 });
 }
 
 /// Devuelve una referencia al primer elemento, o `None` si el slice está vacío.
@@ -42,7 +45,7 @@ pub fn reemplazar_negativos(numeros: &mut [i32]) {
 /// El `Option<&i32>` demuestra que una referencia prestada puede viajar dentro
 /// de un `Option`.
 pub fn primer_elemento(numeros: &[i32]) -> Option<&i32> {
-    todo!("Implementa primer_elemento")
+    numeros.first()
 }
 
 /// Divide un texto en palabras y devuelve préstamos a esas palabras.
@@ -51,10 +54,10 @@ pub fn primer_elemento(numeros: &[i32]) -> Option<&i32> {
 /// mantenerlo vivo mientras use el vector. Es un ejemplo de elisión de
 /// lifetimes: el compilador entiende que la salida vive lo mismo que la entrada.
 pub fn dividir_en_palabras(texto: &str) -> Vec<&str> {
-    todo!("Implementa dividir_en_palabras")
+    texto.split_whitespace().collect()
 }
 
 /// Suma las longitudes de todos los fragmentos.
 pub fn longitud_total(fragmentos: &[&str]) -> usize {
-    todo!("Implementa longitud_total")
+    fragmentos.iter().map(|s| s.len()).sum()
 }
