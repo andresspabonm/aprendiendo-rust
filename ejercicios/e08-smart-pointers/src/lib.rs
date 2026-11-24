@@ -23,36 +23,57 @@ pub enum Lista {
 impl Lista {
     /// Crea una lista vacía (`Nil`).
     pub fn new() -> Self {
-        todo!("Implementa Lista::new")
+        Self::Nil
     }
 
     /// Inserta `valor` al principio y devuelve la lista resultante.
     ///
     /// Consume `self` para no clonar toda la lista.
     pub fn push(self, valor: i32) -> Self {
-        todo!("Implementa Lista::push")
+        Self::Cons(valor, Box::new(self))
     }
 
     /// Crea una lista con los valores en el mismo orden del slice.
     ///
     /// `Lista::desde_slice(&[1, 2, 3])` debe representar `1 -> 2 -> 3 -> Nil`.
     pub fn desde_slice(valores: &[i32]) -> Self {
-        todo!("Implementa Lista::desde_slice")
+        valores
+            .iter()
+            .rev()
+            .fold(Self::new(), |lista, &valor| lista.push(valor))
     }
 
     /// Número de elementos.
     pub fn longitud(&self) -> usize {
-        todo!("Implementa Lista::longitud")
+        let mut l = 0;
+        let mut actual = self;
+        while let Self::Cons(_, siguiente) = actual {
+            l += 1;
+            actual = siguiente;
+        }
+        l
     }
 
     /// Suma de todos los elementos.
     pub fn suma(&self) -> i32 {
-        todo!("Implementa Lista::suma")
+        let mut s = 0;
+        let mut actual = self;
+        while let Self::Cons(valor, siguiente) = actual {
+            s += *valor;
+            actual = siguiente;
+        }
+        s
     }
 
     /// Convierte la lista en un `Vec` en el mismo orden.
     pub fn a_vec(&self) -> Vec<i32> {
-        todo!("Implementa Lista::a_vec")
+        let mut v = Vec::new();
+        let mut actual = self;
+        while let Self::Cons(valor, siguiente) = actual {
+            v.push(*valor);
+            actual = siguiente;
+        }
+        v
     }
 }
 
@@ -75,26 +96,28 @@ pub struct Compartido {
 impl Compartido {
     /// Crea un contenedor compartido vacío.
     pub fn nuevo() -> Self {
-        todo!("Implementa Compartido::nuevo")
+        Self {
+            datos: Rc::new(RefCell::new(Vec::new())),
+        }
     }
 
     /// Añade un valor al vector interno.
     pub fn agregar(&self, valor: i32) {
-        todo!("Implementa Compartido::agregar")
+        self.datos.borrow_mut().push(valor);
     }
 
     /// Devuelve una copia del contenido actual.
     pub fn valores(&self) -> Vec<i32> {
-        todo!("Implementa Compartido::valores")
+        self.datos.borrow().clone()
     }
 
     /// Suma todos los valores.
     pub fn total(&self) -> i32 {
-        todo!("Implementa Compartido::total")
+        self.datos.borrow().iter().sum()
     }
 
     /// Número de dueños del `Rc` interno.
     pub fn num_referencias(&self) -> usize {
-        todo!("Implementa Compartido::num_referencias")
+        Rc::strong_count(&self.datos)
     }
 }
