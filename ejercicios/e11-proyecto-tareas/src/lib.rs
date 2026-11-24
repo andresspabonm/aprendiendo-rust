@@ -26,13 +26,22 @@ impl Prioridad {
     /// Acepta `"baja"`, `"media"` y `"alta"`. Cualquier otra cosa devuelve
     /// `None`.
     pub fn desde_texto(texto: &str) -> Option<Self> {
-        todo!("Implementa Prioridad::desde_texto")
+        match texto.trim().to_lowercase().as_str() {
+            "baja" => Some(Self::Baja),
+            "media" => Some(Self::Media),
+            "alta" => Some(Self::Alta),
+            _ => None,
+        }
     }
 }
 
 impl fmt::Display for Prioridad {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("Implementa Display para Prioridad")
+        match self {
+            Self::Baja => write!(f, "baja"),
+            Self::Media => write!(f, "media"),
+            Self::Alta => write!(f, "alta"),
+        }
     }
 }
 
@@ -48,7 +57,14 @@ pub struct Tarea {
 impl fmt::Display for Tarea {
     /// Formato: `[ ] #3 (alta) Comprar pan` o `[x] #3 (alta) Comprar pan`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("Implementa Display para Tarea")
+        write!(
+            f,
+            "[{}] #{} ({}) {}",
+            if self.completada { "x" } else { " " },
+            self.id,
+            self.prioridad,
+            self.titulo
+        )
     }
 }
 
@@ -67,7 +83,14 @@ pub enum ErrorTarea {
 
 impl fmt::Display for ErrorTarea {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("Implementa Display para ErrorTarea")
+        match self {
+            Self::TituloVacio => write!(f, "el título no puede estar vacío"),
+            Self::NoEncontrada(id) => write!(f, "no existe la tarea con id {id}"),
+            Self::PrioridadInvalida(texto) => {
+                write!(f, "prioridad inválida: {texto} (usa baja, media o alta)")
+            }
+            Self::IdInvalido(texto) => write!(f, "id inválido: {texto}"),
+        }
     }
 }
 
@@ -76,62 +99,114 @@ impl std::error::Error for ErrorTarea {}
 /// Gestor de tareas en memoria.
 ///
 /// Usa `BTreeMap` para que `listar` devuelva las tareas ordenadas por id.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct GestorTareas {
     tareas: BTreeMap<u32, Tarea>,
     siguiente_id: u32,
 }
 
+impl Default for GestorTareas {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl GestorTareas {
     /// Crea un gestor vacío. El primer id asignado debe ser `1`.
     pub fn new() -> Self {
-        todo!("Implementa GestorTareas::new")
+        Self {
+            tareas: BTreeMap::new(),
+            siguiente_id: 1,
+        }
     }
 
     /// Añade una tarea y devuelve su id.
     ///
     /// Recorta espacios del título. Si queda vacío, devuelve `TituloVacio`.
     pub fn agregar(&mut self, titulo: &str, prioridad: Prioridad) -> Result<u32, ErrorTarea> {
-        todo!("Implementa GestorTareas::agregar")
+        let t = String::from(titulo.trim());
+        if t.is_empty() {
+            return Err(ErrorTarea::TituloVacio);
+        }
+
+        let id = self.siguiente_id;
+
+        self.tareas.insert(
+            id,
+            Tarea {
+                id,
+                titulo: t,
+                prioridad,
+                completada: false,
+            },
+        );
+        self.siguiente_id += 1;
+
+        Ok(id)
     }
 
     /// Marca una tarea como completada.
     ///
     /// Si ya estaba completada, no falla.
     pub fn completar(&mut self, id: u32) -> Result<(), ErrorTarea> {
-        todo!("Implementa GestorTareas::completar")
+        match self.tareas.get_mut(&id) {
+            None => Err(ErrorTarea::NoEncontrada(id)),
+            Some(tarea) => {
+                tarea.completada = true;
+                Ok(())
+            }
+        }
     }
 
     /// Elimina una tarea y la devuelve.
     pub fn eliminar(&mut self, id: u32) -> Result<Tarea, ErrorTarea> {
-        todo!("Implementa GestorTareas::eliminar")
+        match self.tareas.remove(&id) {
+            None => Err(ErrorTarea::NoEncontrada(id)),
+            Some(tarea) => Ok(tarea),
+        }
     }
 
     /// Devuelve todas las tareas ordenadas por id.
     pub fn listar(&self) -> Vec<&Tarea> {
-        todo!("Implementa GestorTareas::listar")
+        self.tareas.values().collect()
     }
 
     /// Devuelve las tareas no completadas, ordenadas por id.
     pub fn pendientes(&self) -> Vec<&Tarea> {
-        todo!("Implementa GestorTareas::pendientes")
+        self.listar()
+            .into_iter()
+            .filter(|tarea| !tarea.completada)
+            .collect()
     }
 
     /// Devuelve las tareas de una prioridad concreta, ordenadas por id.
     pub fn por_prioridad(&self, prioridad: Prioridad) -> Vec<&Tarea> {
-        todo!("Implementa GestorTareas::por_prioridad")
+        self.listar()
+            .into_iter()
+            .filter(|tarea| tarea.prioridad == prioridad)
+            .collect()
     }
 
     /// Devuelve las tareas cuyo título contenga `texto`, sin distinguir
     /// mayúsculas. Ordenadas por id.
     pub fn buscar(&self, texto: &str) -> Vec<&Tarea> {
-        todo!("Implementa GestorTareas::buscar")
+        self.listar()
+            .into_iter()
+            .filter(|tarea| tarea.titulo.to_lowercase().contains(&texto.to_lowercase()))
+            .collect()
     }
 
     /// Porcentaje de tareas completadas, de `0.0` a `100.0`.
     ///
     /// Si no hay tareas, devuelve `0.0`.
     pub fn progreso(&self) -> f64 {
-        todo!("Implementa GestorTareas::progreso")
+        match self.listar().len() {
+            0 => 0.0,
+            total => {
+                let resto = self.pendientes().len();
+                let faltante = resto as f64 / total as f64;
+                (1.0 - faltante) * 100.0
+            }
+        }
     }
 }
