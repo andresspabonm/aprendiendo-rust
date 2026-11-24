@@ -17,27 +17,28 @@ pub struct Rectangulo {
 impl Rectangulo {
     /// Crea un rectángulo con las dimensiones dadas.
     pub fn new(ancho: f64, alto: f64) -> Self {
-        todo!("Implementa Rectangulo::new")
+        Self { ancho, alto }
     }
 
     /// Área del rectángulo.
     pub fn area(&self) -> f64 {
-        todo!("Implementa Rectangulo::area")
+        self.ancho * self.alto
     }
 
     /// Perímetro del rectángulo.
     pub fn perimetro(&self) -> f64 {
-        todo!("Implementa Rectangulo::perimetro")
+        2.0 * (self.ancho + self.alto)
     }
 
     /// Indica si los dos lados miden lo mismo.
     pub fn es_cuadrado(&self) -> bool {
-        todo!("Implementa Rectangulo::es_cuadrado")
+        self.ancho == self.alto
     }
 
     /// Multiplica ambos lados por `factor`, modificando el rectángulo.
     pub fn escalar(&mut self, factor: f64) {
-        todo!("Implementa Rectangulo::escalar")
+        self.ancho *= factor;
+        self.alto *= factor;
     }
 }
 
@@ -58,18 +59,26 @@ impl Forma {
     /// - Rectángulo: `ancho * alto`.
     /// - Triángulo: `base * altura / 2`.
     pub fn area(&self) -> f64 {
-        todo!("Implementa Forma::area")
+        match self {
+            Forma::Circulo { radio } => std::f64::consts::PI * radio.powi(2),
+            Forma::Rectangulo { ancho, alto } => ancho * alto,
+            Forma::Triangulo { base, altura } => base * altura / 2.0
+        }
     }
 
     /// Devuelve `"círculo"`, `"rectángulo"` o `"triángulo"`.
     pub fn nombre(&self) -> &'static str {
-        todo!("Implementa Forma::nombre")
+        match self {
+            Forma::Circulo { .. } => "círculo",
+            Forma::Rectangulo { .. } => "rectángulo",
+            Forma::Triangulo { .. } => "triángulo"
+        }
     }
 
     /// Devuelve una descripción con dos decimales, por ejemplo:
     /// `"círculo con área 3.14"`.
     pub fn descripcion(&self) -> String {
-        todo!("Implementa Forma::descripcion")
+        format!("{} con área {:.2}", self.nombre(), self.area())
     }
 }
 
@@ -83,21 +92,22 @@ pub struct Punto {
 impl Punto {
     /// Crea un punto con las coordenadas dadas.
     pub fn new(x: i32, y: i32) -> Self {
-        todo!("Implementa Punto::new")
+        Self { x, y }
     }
 
     /// Devuelve el origen `(0, 0)`.
     pub fn origen() -> Self {
-        todo!("Implementa Punto::origen")
+        Self::default()
     }
 
     /// Suma `dx` y `dy` a las coordenadas.
     pub fn trasladar(&mut self, dx: i32, dy: i32) {
-        todo!("Implementa Punto::trasladar")
+        self.x += dx;
+        self.y += dy;
     }
 
     /// Distancia euclidiana al origen: `sqrt(x^2 + y^2)`.
     pub fn distancia_al_origen(&self) -> f64 {
-        todo!("Implementa Punto::distancia_al_origen")
+        ((self.x.pow(2) + self.y.pow(2)) as f64).sqrt()
     }
 }
