@@ -32,11 +32,8 @@ pub enum Instruccion {
 pub fn ejecutar(instruccion: &Instruccion) -> i32 {
     match instruccion {
         Instruccion::Avanzar(n) => *n,
-        Instruccion::Repetir {
-            veces,
-            instruccion
-        } => *veces as i32 * ejecutar(instruccion),
-        _ => 0
+        Instruccion::Repetir { veces, instruccion } => *veces as i32 * ejecutar(instruccion),
+        _ => 0,
     }
 }
 
@@ -45,9 +42,9 @@ pub fn ejecutar(instruccion: &Instruccion) -> i32 {
 pub fn clasificar(n: i32) -> &'static str {
     match n {
         x if x < 0 => "negativo",
-        x if x == 0 => "cero",
+        0 => "cero",
         x if x % 2 == 0 => "positivo par",
-        _ => "positivo impar"
+        _ => "positivo impar",
     }
 }
 
@@ -62,17 +59,15 @@ pub fn describir_opcion(valor: Option<i32>) -> String {
         Some(n) if n > 0 => format!("positivo: {}", n),
         Some(0) => "cero".to_string(),
         Some(n) if n < 0 => format!("negativo: {}", n),
-        _ => "sin valor".to_string()
+        _ => "sin valor".to_string(),
     }
 }
 
 /// Suma solo los valores presentes de una lista de opciones.
 pub fn sumar_opciones(valores: &[Option<i32>]) -> i32 {
     let mut total: i32 = 0;
-    for valor in valores {
-        if let Some(n) = valor {
-            total += *n;
-        }
+    for n in valores.iter().flatten() {
+        total += *n;
     }
     total
 }
@@ -80,13 +75,9 @@ pub fn sumar_opciones(valores: &[Option<i32>]) -> i32 {
 /// Devuelve la primera palabra del texto que tenga al menos `minimo`
 /// caracteres, o `None` si no hay ninguna.
 pub fn primera_palabra_larga(texto: &str, minimo: usize) -> Option<&str> {
-    let mut palabras = texto.split_whitespace();
-    while let Some(palabra) = palabras.next() {
-        if palabra.len() >= minimo {
-            return Some(palabra);
-        }
-    }
-    None
+    texto
+        .split_whitespace()
+        .find(|palabra| palabra.len() >= minimo)
 }
 
 /// Describe una pareja `(número, etiqueta)` con estas reglas:
@@ -96,8 +87,8 @@ pub fn primera_palabra_larga(texto: &str, minimo: usize) -> Option<&str> {
 /// - `(n, etiqueta)` → `"{n}: {etiqueta}"`.
 pub fn describir_pareja(pareja: (i32, &str)) -> String {
     match pareja {
-        (0, _) =>  "cero".to_string(),
+        (0, _) => "cero".to_string(),
         (n, "importante") => format!("importante: {}", n),
-        (n, etiqueta) => format!("{}: {}", n, etiqueta)
+        (n, etiqueta) => format!("{}: {}", n, etiqueta),
     }
 }

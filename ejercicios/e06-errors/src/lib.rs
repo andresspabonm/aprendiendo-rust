@@ -29,7 +29,9 @@ impl fmt::Display for ErrorCalc {
             ErrorCalc::DivisionPorCero => write!(f, "no se puede dividir por cero"),
             ErrorCalc::SinDatos => write!(f, "no hay datos"),
             ErrorCalc::NumeroInvalido(_e) => write!(f, "el texto no es un número válido"),
-            ErrorCalc::EdadFueraDeRango(edad) => write!(f, "la edad {edad} está fuera del rango permitido")
+            ErrorCalc::EdadFueraDeRango(edad) => {
+                write!(f, "la edad {edad} está fuera del rango permitido")
+            }
         }
     }
 }
@@ -64,7 +66,7 @@ pub fn dividir(a: f64, b: f64) -> Result<f64, ErrorCalc> {
 ///
 /// Devuelve `Err(ErrorCalc::SinDatos)` si la lista está vacía.
 pub fn promedio(numeros: &[i32]) -> Result<f64, ErrorCalc> {
-    if numeros.len() == 0 {
+    if numeros.is_empty() {
         Err(ErrorCalc::SinDatos)
     } else {
         Ok(numeros.iter().sum::<i32>() as f64 / numeros.len() as f64)

@@ -62,7 +62,7 @@ impl Forma {
         match self {
             Forma::Circulo { radio } => std::f64::consts::PI * radio.powi(2),
             Forma::Rectangulo { ancho, alto } => ancho * alto,
-            Forma::Triangulo { base, altura } => base * altura / 2.0
+            Forma::Triangulo { base, altura } => base * altura / 2.0,
         }
     }
 
@@ -71,7 +71,7 @@ impl Forma {
         match self {
             Forma::Circulo { .. } => "círculo",
             Forma::Rectangulo { .. } => "rectángulo",
-            Forma::Triangulo { .. } => "triángulo"
+            Forma::Triangulo { .. } => "triángulo",
         }
     }
 

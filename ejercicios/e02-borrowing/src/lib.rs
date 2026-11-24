@@ -12,7 +12,8 @@
 /// Recibe `&str`: solo presta el texto, no toma propiedad de él.
 pub fn contar_vocales(texto: &str) -> usize {
     // Filtrar las vocales y contarlas
-    texto.chars()
+    texto
+        .chars()
         .filter(|c| matches!(c.to_ascii_lowercase(), 'a' | 'e' | 'i' | 'o' | 'u'))
         .count()
 }
@@ -25,7 +26,11 @@ pub fn contar_vocales(texto: &str) -> usize {
 /// Recibe `&mut String` porque modifica el valor del llamador sin quedarse con
 /// la propiedad.
 pub fn normalizar(nombre: &mut String) {
-    *nombre = nombre.to_ascii_lowercase().split_whitespace().collect::<Vec<_>>().join("-");
+    *nombre = nombre
+        .to_ascii_lowercase()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join("-");
 }
 
 /// Suma los elementos de un slice.
@@ -37,7 +42,11 @@ pub fn sumar_slice(numeros: &[i32]) -> i32 {
 
 /// Sustituye los números negativos por cero, modificando el slice original.
 pub fn reemplazar_negativos(numeros: &mut [i32]) {
-    numeros.iter_mut().for_each(|n| if *n < 0 { *n = 0 });
+    numeros.iter_mut().for_each(|n| {
+        if *n < 0 {
+            *n = 0
+        }
+    });
 }
 
 /// Devuelve una referencia al primer elemento, o `None` si el slice está vacío.

@@ -14,9 +14,10 @@ use std::rc::Rc;
 ///
 /// Sin `Box`, el enum tendría tamaño infinito porque cada `Cons` contendría
 /// otra `Lista` directamente.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Lista {
     Cons(i32, Box<Lista>),
+    #[default]
     Nil,
 }
 
@@ -74,12 +75,6 @@ impl Lista {
             actual = siguiente;
         }
         v
-    }
-}
-
-impl Default for Lista {
-    fn default() -> Self {
-        Lista::Nil
     }
 }
 

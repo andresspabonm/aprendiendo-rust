@@ -67,7 +67,10 @@ pub fn area_total<T: Figura>(figuras: &[T]) -> f64 {
 ///
 /// Si hay empate, devuelve la primera.
 pub fn mayor_area<T: Figura>(figuras: &[T]) -> Option<&T> {
-    figuras.iter().rev().max_by(|a, b| a.area().partial_cmp(&b.area()).unwrap())
+    figuras
+        .iter()
+        .rev()
+        .max_by(|a, b| a.area().partial_cmp(&b.area()).unwrap())
 }
 
 /// Duplica un valor clonándolo.
@@ -77,11 +80,7 @@ pub fn duplicar<T: Clone>(valor: T) -> (T, T) {
 
 /// Devuelve el mayor de dos valores.
 pub fn maximo<T: PartialOrd + Copy>(a: T, b: T) -> T {
-    if a >= b {
-        a
-    } else {
-        b
-    }
+    if a >= b { a } else { b }
 }
 
 /// Crea una colección heterogénea usando despacho dinámico.
@@ -90,7 +89,7 @@ pub fn maximo<T: PartialOrd + Copy>(a: T, b: T) -> T {
 pub fn figuras_mixtas() -> Vec<Box<dyn Figura>> {
     vec![
         Box::new(Circulo { radio: 1.0 }),
-        Box::new(Cuadrado { lado: 2.0 })
+        Box::new(Cuadrado { lado: 2.0 }),
     ]
 }
 
